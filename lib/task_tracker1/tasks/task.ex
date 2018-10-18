@@ -21,17 +21,5 @@ defmodule TaskTracker1.Tasks.Task do
     task
     |> cast(attrs, [:title, :description, :status, :time, :user_id])
     |> validate_required([:title, :description, :status, :time, :user_id])
-    |> validate_time(:time)
-  end
-
-  #https://stackoverflow.com/questions/45754213/how-to-make-ecto-changeset-validate-required-accept-blank-values
-  def validate_time(changeset, field, options \\ []) do
-    validate_change(changeset, field, fn _, time ->
-      if rem(time, 15) == 0 do
-        []
-      else
-        [{field, options[:message] || "Must be in increments of 15"}]
-      end
-    end)
   end
 end
