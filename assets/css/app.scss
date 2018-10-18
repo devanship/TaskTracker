@@ -1,0 +1,11 @@
+/* This file is for your main application css. */
+
+@import "~bootstrap/scss/bootstrap";
+
+nav {
+	background-color: #6c757d;
+	padding: 10 !important;
+}
+.navbar-brand, .my-3 {
+	color: #FFF;
+}
