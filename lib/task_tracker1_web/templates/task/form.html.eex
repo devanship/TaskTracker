@@ -32,7 +32,7 @@
   <div class="form-group">
     <%= if @conn.request_path != Routes.task_path(@conn, :new) && @current_user.id == @task.user_id do %>
         <%= label f, :time, class: "label label-default" %>
-        <%= number_input f, :time, step: 15, class: "form-control"%>
+        <%= number_input f, :time, class: "form-control"%>
         <%= error_tag f, :time %>
     <%= else %>
         <%= hidden_input f, :time, value: 0 %>
