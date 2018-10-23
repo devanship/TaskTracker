@@ -9,7 +9,10 @@
  mix compile
  mix release --env=prod
 
+echo "Stopping old copy of app, if any..."
 
- echo "Starting app..."
+_build/prod/rel/task_tracker1/bin/task_tracker1 stop || true
 
-_build/prod/rel/task_tracker1/bin/task_tracker1 foreground
+echo "Starting app..."
+
+_build/prod/rel/task_tracker1/bin/task_tracker1 start
