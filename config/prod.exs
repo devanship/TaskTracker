@@ -14,7 +14,7 @@ config :task_tracker1, TaskTracker1Web.Endpoint,
   root: ".",
   version: Application.spec(:phoenix_distillery, :vsn),
   http: [:inet6, port: System.get_env("PORT") || 4000],
-  url: [host: "tasks1.dpatelcs4550.com", port: 80],
+  url: [host: "tasks2.dpatelcs4550.com", port: 80],
   cache_static_manifest: "priv/static/cache_manifest.json"
 
 # Do not print debug messages in production
@@ -73,7 +73,7 @@ config :logger, level: :info
 # separately.
 use Mix.Config
 get_secret = fn name ->
-  base = Path.expand("~/.config/task_tracker1")
+  base = Path.expand("~/.config/task_tracker2")
   File.mkdir_p!(base)
   path = Path.join(base, name)
   unless File.exists?(path) do
@@ -92,11 +92,11 @@ end
 # kept out of version control and might be hard to recover
 # or recreate for your teammates (or yourself later on).
 config :task_tracker1, TaskTracker1Web.Endpoint,
-  secret_key_base: "OqDE1KsEYKoQQBL+fjrD19V16/Ph/qZFNBtogN69zctaaL8agYw+W55S7io9OCXm"
+  secret_key_base: get_secret.("key_base")
 
 # Configure your database
 config :task_tracker1, TaskTracker1.Repo,
-  username: "task_tracker1",
+  username: "task_tracker2",
   password: get_secret.("db_pass"),
-  database: "task_tracker1_prod",
+  database: "task_tracker2_prod",
   pool_size: 15
