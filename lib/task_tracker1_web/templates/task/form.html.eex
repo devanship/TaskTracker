@@ -11,7 +11,7 @@
     <%= error_tag f, :title %>
   </div>
 
-  <div class="form-gr`oup">
+  <div class="form-group">
     <%= label f, :description, class: "label label-default" %>
     <%= textarea f, :description, class: "form-control" %>
     <%= error_tag f, :description %>

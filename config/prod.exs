@@ -92,7 +92,7 @@ end
 # kept out of version control and might be hard to recover
 # or recreate for your teammates (or yourself later on).
 config :task_tracker1, TaskTracker1Web.Endpoint,
-  secret_key_base: "OqDE1KsEYKoQQBL+fjrD19V16/Ph/qZFNBtogN69zctaaL8agYw+W55S7io9OCXm"
+  secret_key_base: get_secret.("key_base");
 
 # Configure your database
 config :task_tracker1, TaskTracker1.Repo,
