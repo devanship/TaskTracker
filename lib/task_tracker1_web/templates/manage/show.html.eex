@@ -1,0 +1,8 @@
+<h1>Show Manage</h1>
+
+<ul>
+
+</ul>
+
+<span><%= link "Edit", to: Routes.manage_path(@conn, :edit, @manage) %></span>
+<span><%= link "Back", to: Routes.manage_path(@conn, :index) %></span>

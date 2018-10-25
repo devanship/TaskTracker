@@ -7,6 +7,7 @@ defmodule TaskTracker1.Users do
   alias TaskTracker1.Repo
 
   alias TaskTracker1.Users.User
+  alias TaskTracker1.Manages.Manage
 
   @doc """
   Returns the list of users.
@@ -106,5 +107,26 @@ defmodule TaskTracker1.Users do
   """
   def change_user(%User{} = user) do
     User.changeset(user, %{})
+  end
+
+  #Gets given user's manager from Manage data
+  #https://hexdocs.pm/ecto/Ecto.Query.html
+  def get_manager(user_id)  do
+    Repo.all(from u in User,
+      join: m in Manage, where: u.id == m.manager_id, where: m.employee_id == ^user_id, select: {u.id, u.name, u.email})
+  end
+
+  #Gets given user's employees
+  def get_employees(user_id) do
+    Repo.all(from m in Manage, join: u in User, where: m.employee_id == u.id, where: m.manager_id == ^user_id, 
+      select: {u.id, u.name, u.email})
+  end
+
+  #Gets all users without managers
+  def get_unmanaged(user_id) do
+    query = Repo.all(from m in Manage, select: m.employee_id)
+    unmanaged = Repo.all(from u in User, where: not u.id in ^query, select: {u.id, u.name, u.email})
+    employees = get_employees(user_id)
+    Enum.concat(unmanaged, employees)
   end
 end

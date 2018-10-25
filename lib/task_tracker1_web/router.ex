@@ -10,8 +10,11 @@ defmodule TaskTracker1Web.Router do
     plug TaskTracker1Web.Plugs.FetchSession
   end
 
-  pipeline :api do
+  pipeline :ajax do
     plug :accepts, ["json"]
+    plug :fetch_session
+    plug :fetch_flash
+    plug TaskTracker1Web.Plugs.FetchSession
   end
 
   scope "/", TaskTracker1Web do
@@ -20,7 +23,14 @@ defmodule TaskTracker1Web.Router do
     get "/", PageController, :index
     resources "/users", UserController
     resources "/tasks", TaskController
+    resources "/manages", ManageController, except: [:new, :edit]
     resources "/sessions", SessionController, only: [:create, :delete], singleton: true
+  end
+
+  scope "/ajax", TaskTracker1Web do
+    pipe_through :ajax
+    resources "/manages", ManageController, except: [:new, :edit]
+    resources "/timeblocks", TimeblockController, except: [:new, :edit]
   end
 
   # Other scopes may use custom stacks.

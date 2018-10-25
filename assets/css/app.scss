@@ -3,9 +3,32 @@
 @import "~bootstrap/scss/bootstrap";
 
 nav {
-	background-color: #6c757d;
+	background-color: #B0B0B0;
 	padding: 10 !important;
+	margin-bottom: 20px;
 }
 .navbar-brand, .my-3 {
 	color: #FFF;
+}
+
+#edit-form {
+	display: none;
+}
+
+#time-log {
+	display: block;
+}
+
+#start {
+	display: inline-block;
+	background-color: green;
+	border-color: green;
+	color: white !important;
+}
+
+#end {
+	display: none;
+	background-color: red;
+	border-color: red;
+	color: white;
 }

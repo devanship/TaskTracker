@@ -1,28 +1,75 @@
-<h1>Listing Users</h1>
+<script>
+  window.manage_path = "<%= Routes.manage_path(@conn, :index) %>";
+  window.current_user_id = "<%= @current_user.id %>";
+</script>
 
-<table>
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Email</th>
+<div id="profile">
+  <h3>Your Manager</h3>
+    <%= if (Enum.empty?(@manager)) do %>
+      <p>No Manager</p>
+    <% else %>
+      <%= Enum.map @manager, fn manager -> %>
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Email</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><%= elem(manager, 1) %></td>
+              <td><%= elem(manager, 2) %></td>
+            </tr>
+          </tbody>
+        </table>
+      <% end %>
+    <% end %>
 
-      <th></th>
-    </tr>
-  </thead>
-  <tbody>
-<%= for user <- @users do %>
-    <tr>
-      <td><%= user.name %></td>
-      <td><%= user.email %></td>
+  <h3>Your Employees</h3>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Email</th>
+      </tr>
+    </thead>
+    <tbody>
+    <%= Enum.map @employees, fn employee -> %>
+        <tr>
+          <td><%= elem(employee, 1) %></td>
+          <td><%= elem(employee, 2) %></td>
+          </td>
+        </tr>
+    <% end %>
+    </tbody>
+  </table>
+</div>
 
-      <td>
-        <%= link "Show", to: Routes.user_path(@conn, :show, user), class: "btn btn-secondary" %>
-        <%= link "Edit", to: Routes.user_path(@conn, :edit, user), class: "btn btn-secondary" %>
-        <%= link "Delete", to: Routes.user_path(@conn, :delete, user), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-secondary" %>
-      </td>
-    </tr>
-<% end %>
-  </tbody>
-</table>
+<span><%= link "Manage", to: Routes.manage_path(@conn, :index)%></span>
 
-<span><%= link "New User", to: Routes.user_path(@conn, :new), class: "btn btn-secondary" %></span>
+<div id="manage">
+  <h3>All Employees</h3>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Email</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+    <%= Enum.map @unmanaged, fn user -> %>
+        <tr>
+          <td><%= elem(user, 1) %></td>
+          <td><%= elem(user, 2) %></td>
+          <td>
+            <a href="#" id="manage-btn" class="manage-btn" data-user-id="<%= elem(user, 0) %>" data-manage="<%= @manages[elem(user, 0)] %>" >
+              Manage
+            </a>
+          </td>
+        </tr>
+    <% end %>
+    </tbody>
+  </table>
+</div>

@@ -7,6 +7,10 @@ defmodule TaskTracker1.Tasks do
   alias TaskTracker1.Repo
 
   alias TaskTracker1.Tasks.Task
+  alias TaskTracker1.Manages.Manage
+  alias TaskTracker1.Users.User
+  alias TaskTracker1.Timeblocks
+  alias TaskTracker1.Timeblocks.Timeblock
 
   @doc """
   Returns the list of tasks.
@@ -56,9 +60,19 @@ defmodule TaskTracker1.Tasks do
 
   """
   def create_task(attrs \\ %{}) do
-    %Task{}
+    task = %Task{}
     |> Task.changeset(attrs)
     |> Repo.insert()
+
+    if(elem(task, 0) != :error) do
+      id = elem(task, 1).id
+      timeblock = %{}
+      |> Map.put("start", attrs["starts"])
+      |> Map.put("end", attrs["end"])
+      |> Map.put("task_id", id)
+      Timeblocks.create_timeblock(timeblock) 
+    end
+    task
   end
 
   @doc """
@@ -74,6 +88,13 @@ defmodule TaskTracker1.Tasks do
 
   """
   def update_task(%Task{} = task, attrs) do
+    id = elem(task, 1).id
+      timeblock = %Timeblock{}
+      |> Map.put("start", attrs["starts"])
+      |> Map.put("end", attrs["end"])
+      |> Map.put("task_id", id) 
+      Timeblocks.create_timeblock(timeblock)
+
     task
     |> Task.changeset(attrs)
     |> Repo.update()
@@ -107,4 +128,30 @@ defmodule TaskTracker1.Tasks do
   def change_task(%Task{} = task) do
     Task.changeset(task, %{})
   end
+
+  def get_timelog(task_id) do
+    Repo.all(from tb in Timeblock, join: t in Task, where: tb.task_id == t.id, where: tb.task_id == ^task_id, 
+      select: {tb.start, tb.end, tb.id})
+  end
+
+  def manager_ids do
+    Repo.all(from m in Manage, select: m.manager_id)
+  end
+
+  def manages_map(user_id) do
+    Repo.all(from m in Manage, where: m.manager_id == ^user_id)
+    |> Enum.map(&({&1.employee_id, &1.id}))
+    |> Enum.into(%{})
+  end
+
+  def employee_tasks(user_id) do
+    employees = Repo.all(from t in Task, join: m in Manage, where: t.user_id == m.employee_id, where: m.manager_id == ^user_id)
+    |> Repo.preload(:user)
+
+    task = Repo.all(from t in Task, where: t.user_id == ^user_id)
+    |> Repo.preload(:user)
+
+    Enum.concat(employees, task)
+  end
+
 end

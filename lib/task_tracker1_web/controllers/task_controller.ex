@@ -3,15 +3,20 @@ defmodule TaskTracker1Web.TaskController do
 
   alias TaskTracker1.Tasks
   alias TaskTracker1.Tasks.Task
+  alias TaskTracker1.Manages
+  alias TaskTracker1.Timeblocks
+
 
   def index(conn, _params) do
-    tasks = Tasks.list_tasks()
-    render(conn, "index.html", tasks: tasks)
+    current_user = conn.assigns[:current_user]
+    tasks = Tasks.employee_tasks(current_user.id)
+    managers = Tasks.manager_ids()
+    render(conn, "index.html", tasks: tasks, managers: managers)
   end
 
   def new(conn, _params) do
     changeset = Tasks.change_task(%Task{})
-    render(conn, "new.html", changeset: changeset)
+    render(conn, "new.html", changeset: changeset, form_type: "Create")
   end
 
   def create(conn, %{"task" => task_params}) do
@@ -19,22 +24,25 @@ defmodule TaskTracker1Web.TaskController do
       {:ok, task} ->
         conn
         |> put_flash(:info, "Task created successfully.")
-        |> redirect(to: Routes.task_path(conn, :show, task))
+        |> redirect(to: Routes.task_path(conn, :index))
 
       {:error, %Ecto.Changeset{} = changeset} ->
-        render(conn, "new.html", changeset: changeset)
+        render(conn, "new.html", changeset: changeset, form_type: "Create")
     end
   end
 
   def show(conn, %{"id" => id}) do
     task = Tasks.get_task!(id)
-    render(conn, "show.html", task: task)
+    managers = Tasks.manager_ids()
+    timeblocks = Tasks.get_timelog(task.id)
+    render(conn, "show.html", task: task, timeblocks: timeblocks, managers: managers)
   end
 
   def edit(conn, %{"id" => id}) do
     task = Tasks.get_task!(id)
     changeset = Tasks.change_task(task)
-    render(conn, "edit.html", task: task, changeset: changeset)
+    current_user = conn.assigns[:current_user]
+    render(conn, "edit.html", task: task, changeset: changeset, current_user: current_user, form_type: "Edit")
   end
 
   def update(conn, %{"id" => id, "task" => task_params}) do
@@ -44,7 +52,7 @@ defmodule TaskTracker1Web.TaskController do
       {:ok, task} ->
         conn
         |> put_flash(:info, "Task updated successfully.")
-        |> redirect(to: Routes.task_path(conn, :show, task))
+        |> redirect(to: Routes.task_path(conn, :index))
 
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "edit.html", task: task, changeset: changeset)

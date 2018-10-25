@@ -17,34 +17,36 @@
     <%= error_tag f, :description %>
   </div>
 
+    <%# https://stackoverflow.com/questions/33805309/how-to-show-all-records-of-a-model-in-phoenix-select-field %>
+  <div class="form-group">
+    <%= label f, :user_id, class: "label label-default" %>
+    <%= select f, :user_id, Enum.map(TaskTracker1.Users.list_users(), &{&1.name, &1.id}), class: "form-control"%>
+    <%= error_tag f, :user_id %>
+  </div>
+
   <%#  https://stackoverflow.com/questions/33676255/phoenix-showing-hiding-html-elements-depending-on-the-route %>
   <div class="form-group">
     <%= if @conn.request_path != Routes.task_path(@conn, :new) && @current_user.id == @task.user_id do %>
         <%= label f, "Done", class: "label label-default"%>
         <%= checkbox f, :status, class: "form-control" %>
         <%= error_tag f, :status %>
-    <%= else %>
+    <% else %>
         <%= hidden_input f, :status%>
-    <%= end %>
+    <% end %>
   </div>
 
-  <%#  https://stackoverflow.com/questions/33676255/phoenix-showing-hiding-html-elements-depending-on-the-route %>
-  <div class="form-group">
-    <%= if @conn.request_path != Routes.task_path(@conn, :new) && @current_user.id == @task.user_id do %>
-        <%= label f, :time, class: "label label-default" %>
-        <%= number_input f, :time, class: "form-control"%>
-        <%= error_tag f, :time %>
-    <%= else %>
-        <%= hidden_input f, :time, value: 0 %>
-    <%= end %>
-  </div>
-
-  <%# https://stackoverflow.com/questions/33805309/how-to-show-all-records-of-a-model-in-phoenix-select-field %>
-  <div class="form-group">
-    <%= label f, :user_id, class: "label label-default" %>
-    <%= select f, :user_id, Enum.map(TaskTracker1.Users.list_users(), &{&1.name, &1.id}), class: "form-control"%>
-    <%= error_tag f, :user_id %>
-  </div>
+  <%= if @form_type == "Create" do %>
+    <div class="form-group">
+      <%= label f, :start, "Start Time", class: "label label-default" %>
+      <%= datetime_local_input f, :start, class: "form-control" %>
+      <%= error_tag f, :start %>
+    </div>
+    <div class="form-group">
+      <%= label f, :end, "End Time", class: "label label-default" %>
+      <%= datetime_local_input f, :end, class: "form-control" %>
+      <%= error_tag f, :end %>
+    </div>
+  <% end %>
 
   <div class="form-group">
     <%= submit "Save", class: "btn btn-secondary" %>

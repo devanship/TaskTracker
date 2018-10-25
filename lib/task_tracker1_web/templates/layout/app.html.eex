@@ -8,16 +8,17 @@
     <link rel="stylesheet" href="<%= Routes.static_path(@conn, "/css/app.css") %>"/>
   </head>
   <body>
-    <div class="container-fluid">
+    <div class = "container-fluid">
       <nav class="navbar navbar-header">
-        <a class="navbar-brand" href="#">Task Tracker</a>
-
+        <div class="navbar-brand" href="#">Task Tracker</div>
         <div class="nav navbar-nav">
           <%= if @current_user do %>
             <p class="my-3">
-              User: <%= @current_user.name %> |
+              <a class="navbar-brand"> Hi <%= @current_user.name%>!</a>
+              <%= link("Profile", to: Routes.user_path(@conn, :index), class: "navbar-toggler") %>
+              <%= link("Tasks", to: Routes.task_path(@conn, :index), class: "navbar-toggler") %> 
               <%= link("Logout", to: Routes.session_path(@conn, :delete),
-                method: :delete) %>
+                method: :delete, class: "navbar-toggler") %>
             </p>
           <% end %>
         </div>
@@ -38,5 +39,6 @@
       <%= render @view_module, @view_template, assigns %>
     </div>
     <script type="text/javascript" src="<%= Routes.static_path(@conn, "/js/app.js") %>"></script>
+    <script>window.csrfToken = "<%= Plug.CSRFProtection.get_csrf_token() %>"</script>
   </body>
 </html>

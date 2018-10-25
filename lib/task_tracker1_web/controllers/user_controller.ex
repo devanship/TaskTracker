@@ -3,10 +3,16 @@ defmodule TaskTracker1Web.UserController do
 
   alias TaskTracker1.Users
   alias TaskTracker1.Users.User
+  alias TaskTracker1.Manages.Manage
 
   def index(conn, _params) do
+    current_user = conn.assigns[:current_user]
     users = Users.list_users()
-    render(conn, "index.html", users: users)
+    manages = TaskTracker1.Tasks.manages_map(current_user.id)
+    manager = TaskTracker1.Users.get_manager(current_user.id)
+    employees = TaskTracker1.Users.get_employees(current_user.id)
+    unmanaged = TaskTracker1.Users.get_unmanaged(current_user.id)
+    render(conn, "index.html", users: users, users: users, manages: manages, manager: manager, employees: employees, unmanaged: unmanaged)
   end
 
   def new(conn, _params) do

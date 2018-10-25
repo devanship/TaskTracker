@@ -1,0 +1,24 @@
+<h1>Listing Manages</h1>
+
+<table>
+  <thead>
+    <tr>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for manage <- @manages do %>
+    <tr>
+
+      <td>
+        <%= link "Show", to: Routes.manage_path(@conn, :show, manage) %>
+        <%= link "Edit", to: Routes.manage_path(@conn, :edit, manage) %>
+        <%= link "Delete", to: Routes.manage_path(@conn, :delete, manage), method: :delete, data: [confirm: "Are you sure?"] %>
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
+
+<span><%= link "New Manage", to: Routes.manage_path(@conn, :new) %></span>

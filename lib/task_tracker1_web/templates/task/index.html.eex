@@ -1,34 +1,53 @@
-<h1>Tasks</h1>
+<script>
+  window.timeblock_path = "<%= Routes.timeblock_path(@conn, :index) %>";
+</script>
 
+<h1>Tasks</h1>
 <table class="table table-striped">
   <thead>
     <tr>
       <th>Title</th>
       <th>Description</th>
-      <th>Status</th>
-      <th>Time</th>
       <th>User</th>
-
+      <th>Status</th>
       <th></th>
     </tr>
   </thead>
   <tbody>
-<%= for task <- @tasks do %>
-    <tr>
-      <td><%= task.title %></td>
-      <td><%= task.description %></td>
-      <td><%= if task.status, do: "Done", else: "In Progress" %></td>
-      <td><%= task.time %></td>
-      <td><%= task.user.name %></td>
-
-      <td>
-        <%= link "Show", to: Routes.task_path(@conn, :show, task), class: "btn btn-secondary" %>
-        <%= link "Edit", to: Routes.task_path(@conn, :edit, task), class: "btn btn-secondary" %>
-        <%= link "Delete", to: Routes.task_path(@conn, :delete, task), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-secondary" %>
-      </td>
-    </tr>
-<% end %>
+    <%= for task <- @tasks do %>
+        <tr>
+          <td><%= task.title %></td>
+          <td><%= task.description %></td>
+          <td><%= task.user.name %></td>
+          <td><%= if task.status, do: "Done", else: "In Progress" %></td>
+          <td>
+            <%= if @current_user.id == task.user_id do %>
+              <a href=# id="start" class="start time-btn btn" onclick="getElementById('end').style.display = 'inline-block'; this.style.display = 'none'" 
+                data-type="Start"
+                data-task-id="<%= task.id %>"
+                data-time="<%= DateTime.utc_now %>"
+                data-clicked="No">
+                Start
+              </a>
+              <a href=# id="end" class="end time-btn btn" onclick="getElementById('start').style.display = 'inline-block'; this.style.display = 'none'"
+                data-type="End"
+                data-task-id="<%= task.id %>"
+                data-time="<%= DateTime.utc_now %>"
+                data-clicked="No">
+                End
+              </a>
+            <% end %>
+            <%= if @current_user.id in @managers || task.user.id == @current_user.id do %>
+              <%= link "Time Log", to: Routes.task_path(@conn, :show, task), class: "btn btn-secondary" %>
+              <%= link "Edit", to: Routes.task_path(@conn, :edit, task), class: "btn btn-secondary" %>
+              <%= link "Delete", to: Routes.task_path(@conn, :delete, task), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-secondary" %>
+            <% end %>
+          </td>
+        </tr>
+    <% end %>
   </tbody>
 </table>
 
-<span><%= link "New Task", to: Routes.task_path(@conn, :new), class: "btn btn-secondary" %></span>
+<%= if @current_user.id in @managers do %>
+  <span><%= link "New Task", to: Routes.task_path(@conn, :new), class: "btn btn-secondary" %></span>
+<% end %>
