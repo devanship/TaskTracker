@@ -23,7 +23,7 @@ use Mix.Releases.Config,
 # and environment configuration is called a profile
 
 get_secret = fn name ->
-  base = Path.expand("~/.config/task_tracker1")
+  base = Path.expand("~/.config/task_tracker2")
   File.mkdir_p!(base)
   path = Path.join(base, name)
   unless File.exists?(path) do
@@ -49,6 +49,7 @@ environment :prod do
   set include_erts: true
   set include_src: false
   set cookie: String.to_atom(get_secret.("prod_cookie"))
+  set vm_args: "rel/vm.args"
 end
 
 # You may define one or more releases in this file.
