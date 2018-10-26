@@ -22,8 +22,6 @@ import _ from "lodash";
 
 $(function () {
    $('.manage-btn').click((ev) => {
-      var text = $(this).text();
-      console.log(text);
       let user_id = $(ev.target).data('user-id');
       let manager_id = $(ev.target).data('manage');
 
@@ -65,19 +63,12 @@ $(function () {
           },
         });
       }
-      if (text == 'Manage') {
-        $(this).text('Unmanage');
-      }
-      else if(text == 'Unmanage') {
-        $(this).text('Manage');
-      }
-
       location.reload();
    });
  });
 
-var START_TIME = "";
-var TIME_ID = "";
+var START = "";
+var ID = "";
 
 $(function () {
   $('.time-btn').click((ev) => {
@@ -87,7 +78,7 @@ $(function () {
     let time = btn.data('time');
     let time_id = btn.data('time-id');
     if (type === "Start") {
-      START_TIME = time;
+      START = time;
         let text = JSON.stringify({
         timeblock: {
           start: time,
@@ -101,7 +92,7 @@ $(function () {
         contentType: "application/json; charset=UTF-8",
         data: text,
         success: (resp) => {
-          TIME_ID = resp.data.id;
+          ID = resp.data.id;
           $('.time-btn').each((_, btn) => {
             if (task_id == $(btn).data('task-id') && $(btn).data('type') === "Start") {
               $(btn).data('clicked', "Yes");
@@ -113,19 +104,19 @@ $(function () {
 
 
     } else if (type == "End") {
-      if (TIME_ID == "") {
+      if (ID == "") {
         alert("You haven't started the task yet.");
       }
 
       else {
         let text = JSON.stringify({
           timeblock: {
-            start: START_TIME,
+            start: START,
             end: time
           },
         });
 
-        $.ajax(timeblock_path + "/" + TIME_ID, {
+        $.ajax(timeblock_path + "/" + ID, {
           method: "put",
           dataType: "json",
           contentType: "application/json; charset=UTF-8",
@@ -134,7 +125,7 @@ $(function () {
             $('.time-btn').each((_, btn) => {
               if (task_id == $(btn).data('task-id') && $(btn).data('type') === "Start") {
                 $(btn).data('clicked', "No");
-                TIME_ID = "";
+                   ID = "";
               }
             });
           },
@@ -148,7 +139,7 @@ $(function () {
         timeblock: {
           start: start_time,
           end: end_time,
-          convert: true
+          task_id: task_id
         },
       });
 
@@ -161,7 +152,7 @@ $(function () {
           $('.time-btn').each((_, btn) => {
             if (task_id == $(btn).data('task-id') && $(btn).data('type') === "Start") {
               $(btn).data('clicked', "No");
-              TIME_ID = "";
+              ID = "";
             }
           });
         },
@@ -177,7 +168,7 @@ $(function () {
           $('.time-btn').each( (_, btn) => {
             if (task_id == $(btn).data('task-id') && $(btn).data('type') === "Start") {
               $(btn).data('clicked', "No");
-              TIME_ID = "";
+              ID = "";
             }
           });
         },

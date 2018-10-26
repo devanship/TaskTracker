@@ -1,40 +1,14 @@
 <script>
    window.timeblock_path = "<%= Routes.timeblock_path(@conn, :index) %>";
 
-   function show_time_edit(task_id, time_id) {
-     var form = document.getElementById('edit-log');
-     var log = document.getElementById('time-log');
-     if (form.style.display == 'none' || !form.style.display) {
-       form.style.display = 'block';
-       log.style.display = 'none';
-     }
-     else {
-       log.style.display = 'block';
-       form.style.display = 'none';
-     }
+   function populate_new_times() {
+    new_start = document.getElementById('new-start');
+    new_end = document.getElementById('new-end');
+    time_submit = document.getElementById('time-submit');
+    time_submit.setAttribute('data-start-time', new_start.value);
+    time_submit.setAttribute('data-end-time', new_end.value);
    }
 </script>
-
-<h1> Time Log </h1>
-<form id="edit-log">
-  <div class="form-group">
-    <label class="control-label"> Start Time: </label>
-    <input type="datetime-local" class="form-control" id="new-start">
-  </div>
-  <div class="form-group">
-    <label class="control-label"> End Time: </label>
-    <input type="datetime-local" class="form-control" id="new-end">
-  </div>
-  <button class="btn btn-secondary" id="time-submit" onClick="get_new_times()"
-    data-type="Edit"
-    data-task-id=""
-    data-time-id=""
-    data-start-time=""
-    data-end-time="">
-    Submit
-  </button>
-  <a href="javascript:void(0);" onclick="show_time_edit()"> Cancel </a>
-</form>
 
 <div id="time-log">
   <p><b>Title:</b> <%= @task.title %></p>
@@ -54,7 +28,7 @@
           <td><%= elem(timeblock, 1) %></td>
           <td>
             <%= if @current_user.id in @managers || @task.user.id == @current_user.id do %>
-              <a href="javascript:void(0);" id="edit-btn" class="btn btn-secondary" onclick="show_time_edit(<%= @task.id %>, <%= elem(timeblock, 2) %>)">Edit</a>
+              <a href="javascript:void(0);" id="edit-btn" class="btn btn-secondary" onclick="getElementById('edit-log').style.display = 'block';">Edit</a>
               <a href="#" id="time-btn" class="time-btn btn btn-secondary" data-type="Delete" data-time-id="<%= elem(timeblock, 2)%>"> Delete </a>
             <% end %>
           </td>
@@ -64,4 +38,26 @@
   </table>
 
   <span><%= link "Back", to: Routes.task_path(@conn, :index) %></span>
+
+  <form id="edit-log">
+    <h1> Time Log </h1>
+    <div class="form-group">
+      <label class="control-label"> Start Time: </label>
+      <input type="datetime-local" class="form-control" id="new-start">
+    </div>
+    <div class="form-group">
+      <label class="control-label"> End Time: </label>
+      <input type="datetime-local" class="form-control" id="new-end">
+    </div>
+    <button class="btn btn-secondary" id="time-submit" onclick="populate_new_times()"
+      data-type="Edit"
+      data-task-id=""
+      data-time-id=""
+      data-start-time=""
+      data-end-time="">
+      Submit
+    </button>
+    <a href="javascript:void(0);" onclick="getElementById('edit-log').style.display = 'none';"> Cancel </a>
+  </form>
 </div>
+

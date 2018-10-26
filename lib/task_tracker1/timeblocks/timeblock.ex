@@ -19,17 +19,5 @@ defmodule TaskTracker1.Timeblocks.Timeblock do
     timeblock
     |> cast(attrs, [:end, :start, :task_id])
     |> validate_required([:start, :task_id])
-    |> validate_time()
-  end
-
-  def validate_time(changeset) do
-    start = get_field(changeset, :start)
-    end_time = get_field(changeset, :end)
-    val = DateTime.compare(start, end_time)
-    if (val == :lt || end_time == nil) do
-      changeset
-    else 
-      add_error(changeset, :time_violation, "Start time must be before end time.")
-    end
   end
 end

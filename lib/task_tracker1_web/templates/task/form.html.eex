@@ -35,7 +35,7 @@
     <% end %>
   </div>
 
-  <%= if @form_type == "Create" do %>
+  <%= if @form_type == "Edit" do %>
     <div class="form-group">
       <%= label f, :start, "Start Time", class: "label label-default" %>
       <%= datetime_local_input f, :start, class: "form-control" %>

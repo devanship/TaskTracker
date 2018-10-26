@@ -46,8 +46,6 @@
   </table>
 </div>
 
-<span><%= link "Manage", to: Routes.manage_path(@conn, :index)%></span>
-
 <div id="manage">
   <h3>All Employees</h3>
   <table class="table table-striped">
@@ -64,7 +62,7 @@
           <td><%= elem(user, 1) %></td>
           <td><%= elem(user, 2) %></td>
           <td>
-            <a href="#" id="manage-btn" class="manage-btn" data-user-id="<%= elem(user, 0) %>" data-manage="<%= @manages[elem(user, 0)] %>" >
+            <a href="#" id="manage-btn" class="manage-btn" data-user-id="<%= elem(user, 0) %>" data-manage="<%= @manages[elem(user, 0)] %>">
               Manage
             </a>
           </td>
