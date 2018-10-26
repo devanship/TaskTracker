@@ -4,14 +4,14 @@ How the app works:
   * To register, click Register on main page. Enter a name and email.
   * To login in, enter email on main page.
   * After completeing the first two steps, you will be redirected to the tasks page, where you will see:
-  	* A list of tasks and their titles, descriptions, status (in progress or done), how much time it took (incrememnts of 15), ajd the assigned user
-  	* Three buttons, show, edit, or delete, which do their respective actions.
-  * The navbar will show the user name and a logout button, which will take you back to the login page if clicked.
-  * To create a new task, click New Task button. Enter title, description, and a user to assign the task to. Hit save to create task or back if you don't want to create the task anymore. 
-  * When you hit Save, the created task will be shown. You can click edit to edit the task or back to return to the task list page. 
+  	* A list of tasks and their titles, descriptions, status (in progress or done). 
+   * If you are a manager, a New Task button will be available for your use. Otherwise, you will not see this button.
+  	* Buttons next to each task: start/end, time log, edit, delete. If start is clicked, a start time entry will be created and the button will change to end. When end is clicked, an end time entry will be created. When Time log is clicked, this start and end entry will be shown along with edit and delete functions. If edit is clicked, a form will show up and the time entries can be changed. 
+  * The navbar will show the user name, profile, tasks, and logout button, which will take you back to the login page if clicked.
+   * The profile button will show the current user his/her manager, the people he/she manages, and a list of all the unmanaged users and the current user's employees with manage buttons. If the manage button is clicked for an employee that is already managed by the current user, the employee will disappear from the Your Employees list. If the manage button is clicked for an employee that is not managed by the current user, the employee will be added to the Your Employees list. 
+  * To create a new task, click New Task button. Enter title, description, and a user to assign the task to. Hit save to create task or back if you don't want to create the task anymore.
   * When Edit is clicked, if the logged in user is assigned to the task, he/she will be able to edit the time and check off the status box if completed.
-  * However, if the logged in user is not assigned the task, he/she will not be able to see a time input box or the status checkbox.
-  * Any user has the ability to change the assigned user to a task. Therefore, if someone wants to mark a task as done or change the time, he/she will have to change the assigned user to himself/herself. 
+  * However, if the logged in user is not assigned the task, he/she will not be able to see the status checkbox.
 
 To start your Phoenix server:
 
