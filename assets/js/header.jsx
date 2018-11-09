@@ -19,7 +19,6 @@ let LoginForm = connect(({login}) => {return {login};})((props) => {
 
   function create_token(ev) {
     api.submit_login(props.login);
-    console.log(props.login);
   }
 
   return <div className="navbar-text">
@@ -32,7 +31,7 @@ let LoginForm = connect(({login}) => {return {login};})((props) => {
         <Input type="password" name="password" placeholder="password"
                value={props.login.password} onChange={update} />
       </FormGroup>
-      <Button onClick={create_token}>Log In</Button>
+      <NavLink to="/" onClick={create_token} className="nav-link">Log In</NavLink>
       <NavLink to="/register" activeClassName="active" className="nav-link">Register</NavLink>
     </Form>
   </div>;
@@ -58,7 +57,7 @@ let Session = connect(({token}) => {return {token};})((props) => {
           <NavLink to="/users" onClick={() => api.fetch_users()} className="nav-link">All Users</NavLink>
         </NavItem>
         <NavItem>
-          <a href="javascript:void(0)" onClick={destroy_token}>Log Out</a>
+          <NavLink to="/" onClick={destroy_token} className="nav-link">Log Out</NavLink>
         </NavItem>
       </ul>
   </div>
@@ -81,7 +80,6 @@ function Header(props) {
         Task Tracker
       </span>
       { session_info }
-
     </nav>
   );
 }

@@ -29,14 +29,6 @@ function Task(props) {
     status = <p>In Progress</p>
   }
 
-  function edit_task() {
-    $("#edit-task").show();
-      props.dispatch({
-        type: 'CLEAR_TASK',
-      });
-    $('input[name="id"]').val(task.id);
-  }
-
   return <div className="card col-4">
     <div className="card-body">
       <h2 className="card-title">{task.title}</h2>
@@ -49,7 +41,7 @@ function Task(props) {
       <div className="col">
           <Link to={"/edit/" + task.id}>Edit</Link>
       </div>
-      <button onClick={() => api.delete_task(task.id)}>Delete</button>
+      <Link to={"/tasks"} onClick={() => api.delete_task(task.id)}>Delete</Link>
     </div>
   </div>;
 }

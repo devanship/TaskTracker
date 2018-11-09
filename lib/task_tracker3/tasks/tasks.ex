@@ -56,7 +56,6 @@ defmodule TaskTracker3.Tasks do
     %Task{}
     |> Task.changeset(attrs)
     |> Repo.insert()
-    |> Repo.preload(:user)
   end
 
   @doc """

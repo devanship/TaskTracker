@@ -74,7 +74,7 @@ config :logger, level: :info
 use Mix.Config
 
 get_secret = fn name ->
-  base = Path.expand("~/.config/husky_shop")
+  base = Path.expand("~/.config/task_tracker3")
   File.mkdir_p!(base)
   path = Path.join(base, name)
   unless File.exists?(path) do
@@ -98,6 +98,6 @@ config :husky_shop, HuskyShopWeb.Endpoint,
 # Configure your database
 config :task_tracker3, TaskTracker3.Repo,
   username: "task_tracker3",
-  password: get_secret.("db_pass"),,
+  password: get_secret.("db_pass"),
   database: "task_tracker3_prod",
   pool_size: 15

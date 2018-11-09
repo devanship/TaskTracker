@@ -23,10 +23,6 @@ import api from './api';
 import root_init from "./root";
 import store from './store';
 
-// $(() => {
-//   let node = $('#root')[0];
-//   root_init(node, store);
-// });
 
 $(function() {
   api.fetch_tasks();

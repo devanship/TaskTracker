@@ -1,9 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Button, FormGroup, Label, Input } from 'reactstrap';
-
+import { Link } from 'react-router-dom';
 import api from './api';
 
+// Taken for Prof. Tuck's notes from last year - https://github.com/NatTuck/microblog-spa/blob/lec20-end/assets/js/cs/nav.jsx
 function EditForm(props) {
   function update(ev) {
     let target = $(ev.target);
@@ -22,15 +23,7 @@ function EditForm(props) {
   }
 
   function submit(ev) {
-    console.log(props.form)
     api.edit_task(props.form);
-  }
-
-  function cancel() {
-    props.dispatch({
-      type: 'CLEAR_TASK',
-    });
-    $("#edit-task").hide();
   }
 
   let users = (_.map(props.users, (uu) =>
@@ -66,8 +59,9 @@ function EditForm(props) {
         </Label>
       </FormGroup>
       <br />
-      <Button onClick={submit} color="primary">Submit</Button>
-      <Button onClick={cancel} color="primary">Cancel</Button>
+      <Link to={"/tasks"} onClick={submit} color="primary">Submit</Link>
+      <br />
+      <Link to={"/tasks"}>Cancel</Link>
     </div>
   );
 };
