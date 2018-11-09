@@ -8,10 +8,10 @@ class TheServer {
       contentType: "application/json; charset=UTF-8",
       data: "",
       success: (resp) => {
-      	store.dispatch({
-      		type: 'TASKS_LIST',
-          	tasks: resp.data,
-      	});
+        store.dispatch({
+          type: 'TASK_LIST',
+          data: resp.data,
+        });
       },
     });
   }
@@ -24,38 +24,10 @@ class TheServer {
       data: "",
       success: (resp) => {
         store.dispatch({
-      		type: 'USERS_LIST',
-          	users: resp.data,
-      	});
-      },
-    });
-  }
-
-  // create_session(email, password) {
-  //   $.ajax("/api/v1/sessions", {
-  //     method: "post",
-  //     dataType: "json",
-  //     contentType: "application/json; charset=UTF-8",
-  //     data: JSON.stringify({email, password}),
-  //     success: (resp) => {
-  //       let state1 = _.assign({}, this.state, { session: resp.data, email: "", password: ""});
-  //       this.setState(state1);
-  //     }
-  //   });
-  // }
-
-  create_session(email, password) {
-    $.ajax("/api/v1/sessions", {
-      method: "post",
-      dataType: "json",
-      contentType: "application/json; charset=UTF-8",
-      data: JSON.stringify({email, password}),
-      success: (resp) => {
-        store.dispatch({
-          type: 'NEW_SESSION',
+          type: 'USER_LIST',
           data: resp.data,
         });
-      }
+      },
     });
   }
 
@@ -69,77 +41,91 @@ class TheServer {
     });
   }
 
-  add_task(task) {
+  create_session(email, password) {
+    this.send_post(
+      "/api/v1/session",
+      {email, password},
+      (resp) => {
+        store.dispatch({
+          type: 'NEW_SESSION',
+          data: resp.data,
+        });
+      }
+    );
+  }
+
+  add_task(data) { 
     $.ajax("/api/v1/tasks", {
       method: "post",
       dataType: "json",
       contentType: "application/json; charset=UTF-8",
-      data: JSON.stringify(task),
+      data: JSON.stringify({token: data.token, task: data}),
       success: (resp) => {
         store.dispatch({
           type: 'ADD_TASK',
-          data: resp.data,
-        }); 
+          task: resp.data,
+        });
       },
     });
   }
 
-  edit_task(task, id) {
-    $.ajax("/api/v1/tasks/" + id, {
+  edit_task(data) {
+    $.ajax("/api/v1/tasks/" + data.id, {
       method: "put",
       dataType: "json",
       contentType: "application/json; charset=UTF-8",
-      data: JSON.stringify(task),
+      data: JSON.stringify({token: data.token, task: data}),
       success: (resp) => {
         store.dispatch({
-          type: 'EDIT_TASK',
-          data: resp.data,
-        }); 
+          type: 'TASKS_LIST',
+          tasks: resp.data,
+        });
       },
     });
   }
 
-  delete_task(task) {
-    $.ajax("/api/v1/tasks/", {
+  delete_task(data) {
+    $.ajax("/api/v1/tasks/" + data, {
       method: "delete",
       dataType: "json",
       contentType: "application/json; charset=UTF-8",
-      data: JSON.stringify(task),
+      data: "",
       success: (resp) => {
         store.dispatch({
-          type: 'DELETE_TASK',
-          data: resp.data,
-        }); 
+          type: 'TASK_LIST',
+          task: resp.data,
+        });
       },
     });
-  }
+  };
 
-  submit_login(login) {
-    $.ajax("/api/v1/token", {
+
+  submit_login(data) {
+    $.ajax("/api/v1/session", {
       method: "post",
       dataType: "json",
       contentType: "application/json; charset=UTF-8",
-      data: JSON.stringify(login),
+      data: JSON.stringify(data),
       success: (resp) => {
         store.dispatch({
           type: 'SET_TOKEN',
-          data: resp.data,
-        }); 
+          token: resp,
+        });
       },
     });
   }
 
-  register_user(register) {
-    $.ajax("/api/v1/user", {
+  register_user(data) {
+    $.ajax("/api/v1/users", {
       method: "post",
       dataType: "json",
       contentType: "application/json; charset=UTF-8",
-      data: JSON.stringify(register),
+      data: JSON.stringify({user: data}),
       success: (resp) => {
         store.dispatch({
-          type: 'NEW_USER',
-          data: resp.data,
-        }); 
+          type: 'ADD_USER',
+          user: resp.data,
+        });
       },
     });
   }

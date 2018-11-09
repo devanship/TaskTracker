@@ -1,6 +1,7 @@
 defmodule TaskTracker3Web.SessionController do
   use TaskTracker3Web, :controller
   alias TaskTracker3.Users.User
+  alias TaskTracker3.Users
 
   def create(conn, %{"email" => email, "password" => password}) do
     with %User{} = user <- TaskTracker3.Users.get_and_auth_user(email, password) do

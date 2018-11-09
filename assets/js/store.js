@@ -1,132 +1,124 @@
+// Adapted from Nat's lecture notes
 import { createStore, combineReducers } from 'redux';
 import deepFreeze from 'deep-freeze';
 
+function tasks(state0 = [], action) {
+  switch (action.type) {
+  case 'TASK_LIST':
+    return action.data;
+  default:
+    return state0;
+  }
+}
+
+function users(state0 = [], action) {
+  switch (action.type) {
+  case 'USER_LIST':
+    return action.data;
+  default:
+    return state0;
+  }
+}
+
+// function session(state0 = null, action) {
+//   switch (action.type) {
+//   case 'NEW_SESSION':
+//     return action.data;
+//   default:
+//     return state0;
+//   }
+// }
+
+// Taken from Prof. Tuck's notes from last year
+let empty_form = {
+  user_id: "",
+  title: "",
+  description: "",
+  time: 0,
+  status: false,
+  token: "",
+};
+
+function form(state0 = empty_form, action) {
+  switch (action.type) {
+    case 'UPDATE_TASK':
+      return Object.assign({}, state0, action.data);
+    case 'CLEAR_TASK':
+      let cleared = {
+        title: "",
+        description: "",
+        time: 0,
+        status: false
+      }
+      return Object.assign({}, state, cleared);
+    case 'SET_TOKEN':
+      let session = {
+        creator_id: action.token.user_id,
+        token: action.token.token,
+        user_id: action.token.user_id
+      }
+      return Object.assign({}, state0, session);
+    case 'DESTROY_TOKEN':
+      return empty_form;
+    default:
+      return state0;
+  }
+}
 
 function token(state = null, action) {
   switch (action.type) {
     case 'SET_TOKEN':
-      return Object.assign({}, state, action.data);
-    case 'CLEAR_TOKEN':
+      return action.token;
+    case 'DESTROY_TOKEN':
       return null;
     default:
       return state;
   }
 }
 
-function users(state = [], action) {
+let empty_login = {
+  email: "",
+  password: "",
+};
+
+function login(state = empty_login, action) {
   switch (action.type) {
-  case 'USER_LIST':
-    return [...action.data];
-  default:
-    return state;
+    case 'UPDATE_LOGIN_FORM':
+      return Object.assign({}, state, action.data);
+    case 'DESTROY_TOKEN':
+      return empty_login;
+    default:
+      return state;
   }
 }
 
-let emptyRegisterForm = { 
-	name: "", 
-	email: "", 
-	password: "" 
-};
-
-function add_user(state = emptyRegisterForm, action) {
-	switch (action.type) {
-		case 'EDIT_USER':
-			return Object.assign({}, state, action.data);
-		default:
-      		return state;
-	}
+let empty_register = {
+  email: "",
+  name: "",
+  password: ""
 }
 
-let emptyLoginForm = {
-	email: "", 
-	password: "" 
-};
-
-function login_user(state = emptyLoginForm, action) {
-	switch (action.type) {
-		case 'LOGIN_USER':
-			return Object.assign({}, state, action.data);
-		default:
-      		return state;
-	}
-}
-
-function tasks(state = [], action) {
+function register(state = empty_register, action) {
   switch (action.type) {
-  case 'TASKS_LIST':
-    return [...action.data];
-   case 'ADD_TASK':
-   	return [action.data, ...state];
-   case 'EDIT_TASK':
-   	return _.map(state, (task) => {
-   		if (task.id == action.data.id) {
-   			return action.data;
-   		} else {
-   			return task;
-   		}
-   	});
-  default:
-    return state;
+    case 'UPDATE_REGISTRATION_FORM':
+      return Object.assign({}, state, action.data);
+    case 'CLEAR_FORM':
+      return empty_register;
+    default:
+      return state;
   }
 }
-
-let emptyTaskForm = {
-	title: "",
-	description: "",
-	status: false,
-	time: 0,
-	user: null
-};
-
-function new_task(state = emptyTaskForm, action) {
-	switch (action.type) {
-		case 'EDIT_NEW':
-			return Object.assign({}, state, action.data);
-		default:
-      		return state;
-	}
-}
-
-function edit(state = emptyTaskForm, action) {
-	switch (action.type) {
-		case 'EDIT_EDIT':
-			return Object.assign({}, state, action.data);
-		default:
-      		return state;
-	}
-}
-
-
-// function session(state = null, action) {
-//   switch (action.type) {
-//   case 'NEW_SESSION':
-//     return action.data;
-//   default:
-//     return state;
-//   }
-// }
-
-// function add_item_forms(state = new Map(), action) {
-//   switch (action.type) {
-//   case 'UPDATE_ADD_CART_FORM':
-//     let state1 = new Map(state);
-//     state1.set(action.product_id, action.count);
-//     return state1;
-//   default:
-//     return state;
-//   }
-// }
 
 function root_reducer(state0, action) {
   console.log("reducer", state0, action);
 
-  let reducer = combineReducers({tasks, new_task, edit, users, add_user, login_user, token});
+  let reducer = combineReducers({tasks, users, form, token, login, register});
   let state1 = reducer(state0, action);
 
   console.log("reducer1", state1);
 
   return deepFreeze(state1);
-}
+};
 
 let store = createStore(root_reducer);
 export default store;

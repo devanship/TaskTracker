@@ -1,75 +1,65 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
-import { Card, CardBody, CardHeader, Row, Col, Button } from 'reactstrap';
+import { Link, BrowserRouter as Router, Route } from 'react-router-dom';
 import _ from 'lodash';
 
 import api from './api';
 
-// Renders the details of an individual task as a card
-function Task(props) {
-  let task = props.task;
+function TaskList(props) {
+  let {root, tasks, dispatch} = props;
+  let tks = _.map(tasks, (tt) =>
+    <Task root={root} key={tt.id} task={tt} dispatch={dispatch} />);
+  return <div className="row">
+    {tks}
+  </div>;
+}
 
-  // Sends a request to delete the task
-  function delete_task() {
-    api.delete_task(task.id);
+function Task(props) {
+  let {task, root, dispatch} = props;
+  function changed(ev) {
+    dispatch({
+      task_id: task.id,
+    });
   }
 
-  // Displays the edit form, populates the hidden field with the task id, and
-  // clears all other fields
+  let status;
+  if (task.status) {
+    status = <p>Done</p>
+  } else {
+    status = <p>In Progress</p>
+  }
+
   function edit_task() {
-    $("#edit-form").show();
+    $("#edit-task").show();
       props.dispatch({
-        type: 'CLEAR_FORM',
+        type: 'CLEAR_TASK',
       });
     $('input[name="id"]').val(task.id);
   }
 
-  // Returns the task details as a Bootstrap card element
-  return (
-    <Col md="6">
-      <Card>
-        <CardHeader>
-          <Row>
-            <Col md="7">
-              {task.title}
-            </Col>
-            <Col md="5">
-              <Button type="button" onClick={edit_task}>Edit</Button>
-              <Button type="button" onClick={delete_task}>Delete</Button>
-            </Col>
-          </Row>
-        </CardHeader>
-        <CardBody>
-          <div>
-            {assign}
-            <p><b>Status: </b>{task.status ? "Yes" : "No"}</p>
-            <p><b>Minutes Spent: </b>{task.time}</p>
-            <p><b>Description: </b>{task.description}</p>
-          </div>
-        </CardBody>
-      </Card>
-    </Col>
-  );
+  return <div className="card col-4">
+    <div className="card-body">
+      <h2 className="card-title">{task.title}</h2>
+      <p className="card-text">
+        Description: {task.description} <br />
+        User: {task.user} <br />
+        Time: {task.time} <br />
+        Status: {status} <br />
+      </p>
+      <div className="col">
+          <Link to={"/edit/" + task.id}>Edit</Link>
+      </div>
+      <button onClick={() => api.delete_task(task.id)}>Delete</button>
+    </div>
+  </div>;
 }
 
-// function Task(props) {
-//   let {root, task} = props;
-//   return <div className="card col-4">
-//     <div className="task-body">
-//       <h2 className="task-title">{task.title}</h2>
-//       <p className="task-text">
-//         {task.description} <br />
-//         status: {task.status} <br />
-//         time: {task.time} <br />
-//         user: {task.user} <br />
-//       </p>
-//       <p className="form-inline">
-//         <button className="btn btn-primary"
-//                 onClick={() => root.add_task(task.id)}>
-//           Add Task
-//         </button>
-//       </p>
-//     </div>
-//   </div>;
-// }
+function state2props(state) {
+  console.log("render TaskList", state);
+
+  return {
+    tasks: state.tasks,
+  };
+}
+
+export default connect(state2props)(TaskList);
