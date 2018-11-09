@@ -31,29 +31,6 @@ class TheServer {
     });
   }
 
-  send_post(path, data, callback) {
-    $.ajax(path, {
-      method: "post",
-      dataType: "json",
-      contentType: "application/json; charset=UTF-8",
-      data: JSON.stringify(data),
-      success: callback,
-    });
-  }
-
-  create_session(email, password) {
-    this.send_post(
-      "/api/v1/session",
-      {email, password},
-      (resp) => {
-        store.dispatch({
-          type: 'NEW_SESSION',
-          data: resp.data,
-        });
-      }
-    );
-  }
-
   add_task(data) { 
     $.ajax("/api/v1/tasks", {
       method: "post",
@@ -61,11 +38,15 @@ class TheServer {
       contentType: "application/json; charset=UTF-8",
       data: JSON.stringify({token: data.token, task: data}),
       success: (resp) => {
+        alert("Task created.");
         store.dispatch({
           type: 'ADD_TASK',
           task: resp.data,
         });
       },
+      error: (resp) => {
+        alert("Could not create tasks. Please check fields.");
+      }
     });
   }
 
@@ -91,6 +72,7 @@ class TheServer {
       contentType: "application/json; charset=UTF-8",
       data: "",
       success: (resp) => {
+        alert("Task deleted.");
         store.dispatch({
           type: 'TASK_LIST',
           task: resp.data,
@@ -98,7 +80,6 @@ class TheServer {
       },
     });
   };
-
 
   submit_login(data) {
     $.ajax("/api/v1/session", {
@@ -122,6 +103,7 @@ class TheServer {
       contentType: "application/json; charset=UTF-8",
       data: JSON.stringify({user: data}),
       success: (resp) => {
+        alert("User registered.");
         store.dispatch({
           type: 'ADD_USER',
           user: resp.data,

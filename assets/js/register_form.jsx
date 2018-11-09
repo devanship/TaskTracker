@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 import { Button, FormGroup, Label, Input } from 'reactstrap';
 
 import api from './api';
@@ -20,13 +21,6 @@ function RegistrationForm(props) {
     api.register_user(props.form);
   }
 
-  function cancel() {
-    props.dispatch({
-      type: 'CLEAR_FORM',
-    });
-    $("#registration-form").hide();
-  }
-
   return (
     <div id="registration-form">
       <h2>Register</h2>
@@ -39,11 +33,12 @@ function RegistrationForm(props) {
         <Input type="email" name="email" value={props.form.email} onChange={update} placeholder="user@example.com" />
       </FormGroup>
       <FormGroup>
-        <Label for="password">Password</Label>
+        <Label for="password">Password (Must be 8 characters long.)</Label>
         <Input type="password" name="password" value={props.form.password} onChange={update} />
       </FormGroup>
-      <Button onClick={submit} color="primary">Submit</Button>
-      <Button onClick={cancel} color="primary">Cancel</Button>
+      <Link to={"/"} onClick={submit} color="primary">Submit</Link>
+      <br />
+      <Link to={"/"}>Cancel</Link>
     </div>
   );
 };

@@ -41,10 +41,9 @@ function form(state0 = empty_form, action) {
         time: 0,
         status: false
       }
-      return Object.assign({}, state, cleared);
+      return Object.assign({}, state0, cleared);
     case 'SET_TOKEN':
       let session = {
-        creator_id: action.token.user_id,
         token: action.token.token,
         user_id: action.token.user_id
       }
@@ -72,14 +71,14 @@ let empty_login = {
   password: "",
 };
 
-function login(state = empty_login, action) {
+function login(state0 = empty_login, action) {
   switch (action.type) {
     case 'UPDATE_LOGIN_FORM':
-      return Object.assign({}, state, action.data);
+      return Object.assign({}, state0, action.data);
     case 'DESTROY_TOKEN':
       return empty_login;
     default:
-      return state;
+      return state0;
   }
 }
 
@@ -89,14 +88,14 @@ let empty_register = {
   password: ""
 }
 
-function register(state = empty_register, action) {
+function register(state0 = empty_register, action) {
   switch (action.type) {
     case 'UPDATE_REGISTRATION_FORM':
-      return Object.assign({}, state, action.data);
+      return Object.assign({}, state0, action.data);
     case 'CLEAR_FORM':
       return empty_register;
     default:
-      return state;
+      return state0;
   }
 }
 

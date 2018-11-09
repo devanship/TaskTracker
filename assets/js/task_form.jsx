@@ -34,6 +34,7 @@ function TaskForm(props) {
       <FormGroup>
         <Label for="user_id">User</Label>
         <Input type="select" name="user_id" onChange={update}>
+          <option>Select User</option>
           {users}
         </Input>
       </FormGroup>
@@ -48,7 +49,7 @@ function TaskForm(props) {
         <Input type="textarea" name="description" onChange={update} />
       </FormGroup>
       <FormGroup>
-        <Label for="time">Increments of 15</Label>
+        <Label for="time">Time (Increments of 15)</Label>
         <Input type="number" name="time" min="0" step="15" onChange={update} />
       </FormGroup>
       <FormGroup check>
