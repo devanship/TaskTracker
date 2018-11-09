@@ -20,15 +20,6 @@ function users(state0 = [], action) {
   }
 }
 
-// function session(state0 = null, action) {
-//   switch (action.type) {
-//   case 'NEW_SESSION':
-//     return action.data;
-//   default:
-//     return state0;
-//   }
-// }
-
 // Taken from Prof. Tuck's notes from last year
 let empty_form = {
   user_id: "",
