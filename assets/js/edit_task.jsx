@@ -4,6 +4,7 @@ import { Button, FormGroup, Label, Input } from 'reactstrap';
 
 import api from './api';
 
+// Taken for Prof. Tuck's notes from last year - https://github.com/NatTuck/microblog-spa
 function EditForm(props) {
   function update(ev) {
     let target = $(ev.target);
